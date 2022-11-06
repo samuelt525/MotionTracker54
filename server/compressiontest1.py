@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# TEMPORARY FILE! because python can't fucking import modules with dashes in the file name
+
 import cv2
 import sys
 import os
