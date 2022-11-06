@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify, Response
 from flask_cors import CORS
 from io import BytesIO
 import os
+from compressiontest1 import *
 import pathlib
 import time
 
