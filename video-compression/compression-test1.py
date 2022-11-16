@@ -6,6 +6,9 @@ import os
 from alive_progress import alive_bar
 import time
 
+from moviepy.video.io.VideoFileClip import VideoFileClip
+
+
 ## USAGE
 # python compression-test1.py input_filename.mp4 int<rescale_ratio> int<output_fps>
 
@@ -17,11 +20,16 @@ def compression_test(argv):
     if len(argv) != 4:
         raise Exception('Check Args!')
 
-    #file type check
+    # file type check, convert video to mp4 if needed
     t = str(argv[1]).split(".")
+    file_to_convert = str(argv[1])
+    file_to_save = t[0] + '_converted' + argv[3] + str(time.time()) + '.mp4'
     if t[-1].casefold() not in ["mp4", "wav"]:
-        print(t)
-        raise Exception('Raise Exception incompatible file type only mp4 or wav required')
+        # Using Moviepy to convert video to mp4
+        t = str(argv[1]).split(".")
+        clip = VideoFileClip(file_to_convert)
+        clip.write_videofile(file_to_save, codec='libx264')
+        file_to_convert = file_to_save
 
     #range of compression check
     if int(argv[2]) not in range(1,100):
@@ -39,7 +47,7 @@ def compression_test(argv):
         return cv2.resize(frame, dim)
 
     # getting video and then processing it and saving in filename_ouput.mp4
-    cap = cv2.VideoCapture(str(argv[1]))
+    cap = cv2.VideoCapture(file_to_convert)
 
     width  = (cap.get(3) * int(argv[2]))/ 100
     height = (cap.get(4) * int(argv[2]))/ 100
